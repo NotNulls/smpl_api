@@ -6,8 +6,8 @@ try:
     from collections.abc import Mapping
 except ImportError:
     from collections import Mapping
-from user import UserRegister
-from item import Item, ItemList
+from resources.user import UserRegister
+from resources.item import Item, ItemList
 
 app = Flask(__name__)
 app.secret_key = "emanuel"
@@ -25,5 +25,5 @@ api.add_resource(UserRegister, '/register')
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
+
 
