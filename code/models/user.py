@@ -1,4 +1,3 @@
-import sqlite3
 from db import db
 
 class UserModel(db.Model):
@@ -9,44 +8,19 @@ class UserModel(db.Model):
     password = db.Column(db.String(80))
 
 
-    def __init__(self, _id, username, password):
-        #it is _id because the id is a python keyword
-        self.id = _id
+    def __init__(self, username, password):
         self.username = username
         self.password = password
 
     @classmethod
     def find_by_username(cls, username):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM users WHERE username=?"
-        result = cursor.execute(query, (username,)) # trailing comma tells python that we are creating a tuple
-        row = result.fetchone()
-        if row :
-            #user = User(row[0],row[1],row[2])
-            user = cls(*row) #passing it as a set of arguments
-        else:
-            user = None
-        #no connection.commit() since we are not adding any data
-        
-        connection.close()
+        user = cls.query.filter_by(username=username).first()
         return user
 
     @classmethod
     def find_by_id(cls, _id):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "SELECT * FROM users WHERE id=?"
-        result = cursor.execute(query, (_id,)) # trailing comma tells python that we are creating a tuple
-        row = result.fetchone()
-        if row :
-            #user = User(row[0],row[1],row[2])
-            user = cls(*row) #passing it as a set of arguments
-        else:
-            user = None
-        #no connection.commit() since we are not adding any data
-        
-        connection.close()
-        return user
+        return cls.query.filter_by(id=_id)
+    
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
