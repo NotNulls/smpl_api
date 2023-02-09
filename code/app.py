@@ -10,7 +10,8 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 
 app = Flask(__name__)
-app.secret_key = "emanuel"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = "emmanuel"
 api = Api(app)
 
 #this automatically creates a /auth
@@ -24,6 +25,8 @@ api.add_resource(ItemList,'/items')
 api.add_resource(UserRegister, '/register')
 
 if __name__ == "__main__":
+    from db import db
+    db.init_app(app)
     app.run(debug=True)
 
 
