@@ -42,7 +42,7 @@ class Item(Resource):
         data = Item.parser.parse_args()
         
         data = request.get_json()
-        item = ItemModel(name, data['price'], data['store_id'])
+        item = ItemModel(name, data['price'], data['store_ids'])
         #alternatively we could do the following
         # item = ItemModel(name, **data)
 
